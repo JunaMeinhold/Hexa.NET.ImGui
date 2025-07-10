@@ -171,6 +171,7 @@ jobs:
         repository: '${{ inputs.repo }}'
         ref: '${{ inputs.repo-tag }}'
         path: '${{ inputs.repo-path }}'
+        submodules: true
     - name: Install dependencies on Ubuntu
       if: matrix.os-name == 'linux'
       run: |
@@ -275,6 +276,7 @@ jobs:
             repository: "${{ inputs.repo }}"
             ref: "${{ inputs.repo-tag }}"
             path: "${{ inputs.repo-path }}"
+            submodules: true
       - name: Install dependencies on Ubuntu
         run: |
             sudo apt-get update
