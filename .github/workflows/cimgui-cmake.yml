@@ -25,57 +25,51 @@ jobs:
   build-implot:
     uses: ./.github/workflows/cmake.yml
     with:
-      lib-name: implot
-      repo: JunaMeinhold/implot
-      repo-tag: main
+      lib-name: cimplot
+      repo: JunaMeinhold/cimplot
+      repo-tag: master
       output-dir: native
       cmake-flags: -DIMGUI_WCHAR32=ON -DIMGUI_FREETYPE=ON
-      use-vcpkg: true
-      vcpkg-packages: freetype
-      bin-name-linux: implot.so
-      bin-name-linux-normalized: implot.so
-      bin-name-windows: Release/implot.dll
-      bin-name-windows-normalized: implot.dll
-      bin-name-osx: implot.dylib
-      bin-name-osx-normalized: implot.dylib
-      bin-name-android: implot.so
-      bin-name-android-normalized: implot.so
+      bin-name-linux: cimplot.so
+      bin-name-linux-normalized: cimplot.so
+      bin-name-windows: Release/cimplot.dll
+      bin-name-windows-normalized: cimplot.dll
+      bin-name-osx: cimplot.dylib
+      bin-name-osx-normalized: cimplot.dylib
+      bin-name-android: cimplot.so
+      bin-name-android-normalized: cimplot.so
       android-api: 23
   build-imnodes:
     uses: ./.github/workflows/cmake.yml
     with:
-      lib-name: imnodes
-      repo: JunaMeinhold/imnodes
-      repo-tag: main
+      lib-name: cimnodes
+      repo: JunaMeinhold/cimnodes
+      repo-tag: master
       output-dir: native
       cmake-flags: -DIMGUI_WCHAR32=ON -DIMGUI_FREETYPE=ON
-      use-vcpkg: true
-      vcpkg-packages: freetype
-      bin-name-linux: imnodes.so
-      bin-name-linux-normalized: imnodes.so
-      bin-name-windows: Release/imnodes.dll
-      bin-name-windows-normalized: imnodes.dll
-      bin-name-osx: imnodes.dylib
-      bin-name-osx-normalized: imnodes.dylib
-      bin-name-android: imnodes.so
-      bin-name-android-normalized: imnodes.so
+      bin-name-linux: cimnodes.so
+      bin-name-linux-normalized: cimnodes.so
+      bin-name-windows: Release/cimnodes.dll
+      bin-name-windows-normalized: cimnodes.dll
+      bin-name-osx: cimnodes.dylib
+      bin-name-osx-normalized: cimnodes.dylib
+      bin-name-android: cimnodes.so
+      bin-name-android-normalized: cimnodes.so
       android-api: 23
   build-imguizmo:
     uses: ./.github/workflows/cmake.yml
     with:
-      lib-name: imguizmo
-      repo: JunaMeinhold/imguizmo
-      repo-tag: main
+      lib-name: cimguizmo
+      repo: JunaMeinhold/cimguizmo
+      repo-tag: master
       output-dir: native
       cmake-flags: -DIMGUI_WCHAR32=ON -DIMGUI_FREETYPE=ON
-      use-vcpkg: true
-      vcpkg-packages: freetype
-      bin-name-linux: imguizmo.so
-      bin-name-linux-normalized: imguizmo.so
-      bin-name-windows: Release/imguizmo.dll
-      bin-name-windows-normalized: imguizmo.dll
-      bin-name-osx: imguizmo.dylib
-      bin-name-osx-normalized: imguizmo.dylib
-      bin-name-android: imguizmo.so
-      bin-name-android-normalized: imguizmo.so
+      bin-name-linux: cimguizmo.so
+      bin-name-linux-normalized: cimguizmo.so
+      bin-name-windows: Release/cimguizmo.dll
+      bin-name-windows-normalized: cimguizmo.dll
+      bin-name-osx: cimguizmo.dylib
+      bin-name-osx-normalized: cimguizmo.dylib
+      bin-name-android: cimguizmo.so
+      bin-name-android-normalized: cimguizmo.so
       android-api: 23
