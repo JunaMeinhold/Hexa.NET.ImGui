@@ -94,7 +94,7 @@ on:
       linux-deps:
         description: 'Space-separated list of Ubuntu packages to install before build.'
         required: false
-        default: 'build-essential cmake ninja-build'
+        default: 'build-essential cmake'
         type: string
       windows-deps:
         description: 'Space-separated list of Chocolatey packages to install before build.'
@@ -292,8 +292,9 @@ jobs:
       - name: Setup vcpkg for Android
         if: inputs.use-vcpkg == true
         run: |
-          git clone https://github.com/microsoft/vcpkg.git "./vcpkg"
-          cd "./vcpkg"
+          cd ${{ inputs.repo-path }}
+          git clone https://github.com/microsoft/vcpkg.git
+          cd vcpkg
           ./bootstrap-vcpkg.sh
           ./vcpkg install ${{ inputs.vcpkg-packages }} --triplet arm64-android
           ./vcpkg install ${{ inputs.vcpkg-packages }} --triplet x64-android
