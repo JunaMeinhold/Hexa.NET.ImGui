@@ -188,15 +188,15 @@ jobs:
       if: inputs.use-vcpkg == true
       shell: bash
       run: |
-        git clone https://github.com/microsoft/vcpkg.git "./vcpkg"
-        cd "./vcpkg"
+        cd ${{ inputs.repo-path }}
+        git clone https://github.com/microsoft/vcpkg.git
+        cd vcpkg
         ./bootstrap-vcpkg.sh || ./bootstrap-vcpkg.bat
         if [ -n "${{ matrix.vcpkg-triplet }}" ]; then
           ./vcpkg install ${{ inputs.vcpkg-packages }} --triplet "${{ matrix.vcpkg-triplet }}"
         else
           ./vcpkg install ${{ inputs.vcpkg-packages }}
         fi
-        echo "VCPKG_TOOLCHAIN_FILE=./vcpkg/scripts/buildsystems/vcpkg.cmake" >> $GITHUB_ENV
     - name: Configure with CMake for Linux
       if: matrix.os-name == 'linux'
       run: |
