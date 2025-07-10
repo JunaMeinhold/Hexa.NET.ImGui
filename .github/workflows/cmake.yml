@@ -94,7 +94,7 @@ on:
       linux-deps:
         description: 'Space-separated list of Ubuntu packages to install before build.'
         required: false
-        default: 'build-essential cmake'
+        default: 'build-essential cmake ninja-build'
         type: string
       windows-deps:
         description: 'Space-separated list of Chocolatey packages to install before build.'
