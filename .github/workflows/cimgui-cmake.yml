@@ -13,10 +13,6 @@ jobs:
       cmake-flags: -DIMGUI_WCHAR32=ON -DIMGUI_FREETYPE=ON
       use-vcpkg: true
       vcpkg-packages: freetype
-      os: ubuntu-latest
-      arch: x86_64
-      cmake-arch: x64
-      vcpkg-triplet: x64-linux
       bin-name-linux: cimgui.so
       bin-name-linux-normalized: cimgui.so
       bin-name-windows: Release/cimgui.dll
