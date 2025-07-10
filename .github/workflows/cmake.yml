@@ -188,21 +188,21 @@ jobs:
       if: inputs.use-vcpkg == true
       shell: bash
       run: |
-        git clone https://github.com/microsoft/vcpkg.git "${{ inputs.repo-path }}/vcpkg"
-        cd "${{ inputs.repo-path }}/vcpkg"
+        git clone https://github.com/microsoft/vcpkg.git "./vcpkg"
+        cd "./vcpkg"
         ./bootstrap-vcpkg.sh || ./bootstrap-vcpkg.bat
         if [ -n "${{ matrix.vcpkg-triplet }}" ]; then
           ./vcpkg install ${{ inputs.vcpkg-packages }} --triplet "${{ matrix.vcpkg-triplet }}"
         else
           ./vcpkg install ${{ inputs.vcpkg-packages }}
         fi
-        echo "VCPKG_TOOLCHAIN_FILE=${{ inputs.repo-path }}/vcpkg/scripts/buildsystems/vcpkg.cmake" >> $GITHUB_ENV
+        echo "VCPKG_TOOLCHAIN_FILE=./vcpkg/scripts/buildsystems/vcpkg.cmake" >> $GITHUB_ENV
     - name: Configure with CMake for Linux
       if: matrix.os-name == 'linux'
       run: |
         cd ${{ inputs.repo-path }}
         if [ "${{ inputs.use-vcpkg }}" = "true" ]; then \
-          cmake -S . -B ./build ${{ inputs.cmake-flags }} -DCMAKE_TOOLCHAIN_FILE="${{ inputs.repo-path }}/vcpkg/scripts/buildsystems/vcpkg.cmake" -DVCPKG_TARGET_TRIPLET=${{ matrix.vcpkg-triplet }}; \
+          cmake -S . -B ./build ${{ inputs.cmake-flags }} -DCMAKE_TOOLCHAIN_FILE="./vcpkg/scripts/buildsystems/vcpkg.cmake" -DVCPKG_TARGET_TRIPLET=${{ matrix.vcpkg-triplet }}; \
         else \
           cmake -S . -B ./build ${{ inputs.cmake-flags }}; \
         fi
@@ -211,7 +211,7 @@ jobs:
       run: |
         cd ${{ inputs.repo-path }}
         if [ "${{ inputs.use-vcpkg }}" = "true" ]; then \
-          cmake -S . -B ./build -DCMAKE_OSX_ARCHITECTURES=${{ matrix.cmake-arch }} ${{ inputs.cmake-flags }} -DCMAKE_TOOLCHAIN_FILE="${{ inputs.repo-path }}/vcpkg/scripts/buildsystems/vcpkg.cmake" -DVCPKG_TARGET_TRIPLET=${{ matrix.vcpkg-triplet }}; \
+          cmake -S . -B ./build -DCMAKE_OSX_ARCHITECTURES=${{ matrix.cmake-arch }} ${{ inputs.cmake-flags }} -DCMAKE_TOOLCHAIN_FILE="./vcpkg/scripts/buildsystems/vcpkg.cmake" -DVCPKG_TARGET_TRIPLET=${{ matrix.vcpkg-triplet }}; \
         else \
           cmake -S . -B ./build -DCMAKE_OSX_ARCHITECTURES=${{ matrix.cmake-arch }} ${{ inputs.cmake-flags }}; \
         fi
@@ -221,7 +221,7 @@ jobs:
       run: |
         cd ${{ inputs.repo-path }}
         if ($env:USE_VCPKG -eq 'true') {
-          cmake -S . -B ./build -A ${{ matrix.cmake-arch }} ${{ inputs.cmake-flags }} -DCMAKE_TOOLCHAIN_FILE="${{ inputs.repo-path }}/vcpkg/scripts/buildsystems/vcpkg.cmake" -DVCPKG_TARGET_TRIPLET=${{ matrix.vcpkg-triplet }}
+          cmake -S . -B ./build -A ${{ matrix.cmake-arch }} ${{ inputs.cmake-flags }} -DCMAKE_TOOLCHAIN_FILE="./vcpkg/scripts/buildsystems/vcpkg.cmake" -DVCPKG_TARGET_TRIPLET=${{ matrix.vcpkg-triplet }}
         } else {
           cmake -S . -B ./build -A ${{ matrix.cmake-arch }} ${{ inputs.cmake-flags }}
         }
@@ -296,17 +296,17 @@ jobs:
       - name: Setup vcpkg for Android
         if: inputs.use-vcpkg == true
         run: |
-          git clone https://github.com/microsoft/vcpkg.git "${{ inputs.repo-path }}/vcpkg"
-          cd "${{ inputs.repo-path }}/vcpkg"
+          git clone https://github.com/microsoft/vcpkg.git "./vcpkg"
+          cd "./vcpkg"
           ./bootstrap-vcpkg.sh
           ./vcpkg install ${{ inputs.vcpkg-packages }} --triplet arm64-android
           ./vcpkg install ${{ inputs.vcpkg-packages }} --triplet x64-android
-          echo "VCPKG_TOOLCHAIN_FILE=${{ inputs.repo-path }}/vcpkg/scripts/buildsystems/vcpkg.cmake" >> $GITHUB_ENV
+          echo "VCPKG_TOOLCHAIN_FILE=./vcpkg/scripts/buildsystems/vcpkg.cmake" >> $GITHUB_ENV
       - name: Build for arm64-v8a
         run: |
             cd ${{ inputs.repo-path }}
             if [ "${{ inputs.use-vcpkg }}" = "true" ]; then \
-              cmake -S . -B ./build/arm64-v8a ${{ env.android-cmake-flags }} -DCMAKE_ANDROID_ARCH_ABI=arm64-v8a -DCMAKE_ANDROID_API=${{ inputs.android-api }} ${{ inputs.cmake-flags }} -DCMAKE_TOOLCHAIN_FILE="${{ inputs.repo-path }}/vcpkg/scripts/buildsystems/vcpkg.cmake" -DVCPKG_TARGET_TRIPLET=arm64-android; \
+              cmake -S . -B ./build/arm64-v8a ${{ env.android-cmake-flags }} -DCMAKE_ANDROID_ARCH_ABI=arm64-v8a -DCMAKE_ANDROID_API=${{ inputs.android-api }} ${{ inputs.cmake-flags }} -DCMAKE_TOOLCHAIN_FILE="./vcpkg/scripts/buildsystems/vcpkg.cmake" -DVCPKG_TARGET_TRIPLET=arm64-android; \
             else \
               cmake -S . -B ./build/arm64-v8a ${{ env.android-cmake-flags }} -DCMAKE_ANDROID_ARCH_ABI=arm64-v8a -DCMAKE_ANDROID_API=${{ inputs.android-api }} ${{ inputs.cmake-flags }}; \
             fi
@@ -315,7 +315,7 @@ jobs:
         run: |
             cd ${{ inputs.repo-path }}
             if [ "${{ inputs.use-vcpkg }}" = "true" ]; then \
-              cmake -S . -B ./build/x86_64 ${{ env.android-cmake-flags }} -DCMAKE_ANDROID_ARCH_ABI=x86_64 -DCMAKE_ANDROID_API=${{ inputs.android-api }} ${{ inputs.cmake-flags }} -DCMAKE_TOOLCHAIN_FILE="${{ inputs.repo-path }}/vcpkg/scripts/buildsystems/vcpkg.cmake" -DVCPKG_TARGET_TRIPLET=x64-android; \
+              cmake -S . -B ./build/x86_64 ${{ env.android-cmake-flags }} -DCMAKE_ANDROID_ARCH_ABI=x86_64 -DCMAKE_ANDROID_API=${{ inputs.android-api }} ${{ inputs.cmake-flags }} -DCMAKE_TOOLCHAIN_FILE="./vcpkg/scripts/buildsystems/vcpkg.cmake" -DVCPKG_TARGET_TRIPLET=x64-android; \
             else \
               cmake -S . -B ./build/x86_64 ${{ env.android-cmake-flags }} -DCMAKE_ANDROID_ARCH_ABI=x86_64 -DCMAKE_ANDROID_API=${{ inputs.android-api }} ${{ inputs.cmake-flags }}; \
             fi
