@@ -3,7 +3,7 @@ name: Build cimgui Libraries via cmake.yml
 on: [workflow_dispatch]
 
 jobs:
-  build:
+  build-cimgui:
     uses: ./.github/workflows/cmake.yml
     with:
       lib-name: cimgui
@@ -21,4 +21,61 @@ jobs:
       bin-name-osx-normalized: cimgui.dylib
       bin-name-android: cimgui.so
       bin-name-android-normalized: cimgui.so
+      android-api: 23
+  build-implot:
+    uses: ./.github/workflows/cmake.yml
+    with:
+      lib-name: implot
+      repo: JunaMeinhold/implot
+      repo-tag: main
+      output-dir: native
+      cmake-flags: -DIMGUI_WCHAR32=ON -DIMGUI_FREETYPE=ON
+      use-vcpkg: true
+      vcpkg-packages: freetype
+      bin-name-linux: implot.so
+      bin-name-linux-normalized: implot.so
+      bin-name-windows: Release/implot.dll
+      bin-name-windows-normalized: implot.dll
+      bin-name-osx: implot.dylib
+      bin-name-osx-normalized: implot.dylib
+      bin-name-android: implot.so
+      bin-name-android-normalized: implot.so
+      android-api: 23
+  build-imnodes:
+    uses: ./.github/workflows/cmake.yml
+    with:
+      lib-name: imnodes
+      repo: JunaMeinhold/imnodes
+      repo-tag: main
+      output-dir: native
+      cmake-flags: -DIMGUI_WCHAR32=ON -DIMGUI_FREETYPE=ON
+      use-vcpkg: true
+      vcpkg-packages: freetype
+      bin-name-linux: imnodes.so
+      bin-name-linux-normalized: imnodes.so
+      bin-name-windows: Release/imnodes.dll
+      bin-name-windows-normalized: imnodes.dll
+      bin-name-osx: imnodes.dylib
+      bin-name-osx-normalized: imnodes.dylib
+      bin-name-android: imnodes.so
+      bin-name-android-normalized: imnodes.so
+      android-api: 23
+  build-imguizmo:
+    uses: ./.github/workflows/cmake.yml
+    with:
+      lib-name: imguizmo
+      repo: JunaMeinhold/imguizmo
+      repo-tag: main
+      output-dir: native
+      cmake-flags: -DIMGUI_WCHAR32=ON -DIMGUI_FREETYPE=ON
+      use-vcpkg: true
+      vcpkg-packages: freetype
+      bin-name-linux: imguizmo.so
+      bin-name-linux-normalized: imguizmo.so
+      bin-name-windows: Release/imguizmo.dll
+      bin-name-windows-normalized: imguizmo.dll
+      bin-name-osx: imguizmo.dylib
+      bin-name-osx-normalized: imguizmo.dylib
+      bin-name-android: imguizmo.so
+      bin-name-android-normalized: imguizmo.so
       android-api: 23
