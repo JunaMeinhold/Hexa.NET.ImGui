@@ -186,6 +186,7 @@ jobs:
         choco install -y ${{ inputs.windows-deps }}
     - name: Setup vcpkg
       if: inputs.use-vcpkg == true
+      shell: bash
       run: |
         git clone https://github.com/microsoft/vcpkg.git "${{ inputs.repo-path }}/vcpkg"
         cd "${{ inputs.repo-path }}/vcpkg"
