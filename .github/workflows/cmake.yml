@@ -218,14 +218,14 @@ jobs:
         fi
     - name: Configure with CMake for Windows
       if: matrix.os-name == 'windows'
-      shell: pwsh
+      shell: bash
       run: |
         cd ${{ inputs.repo-path }}
-        if ($env:USE_VCPKG -eq 'true') {
-          cmake -S . -B ./build -A ${{ matrix.cmake-arch }} ${{ inputs.cmake-flags }} -DCMAKE_TOOLCHAIN_FILE="./vcpkg/scripts/buildsystems/vcpkg.cmake" -DVCPKG_TARGET_TRIPLET=${{ matrix.vcpkg-triplet }}
-        } else {
-          cmake -S . -B ./build -A ${{ matrix.cmake-arch }} ${{ inputs.cmake-flags }}
-        }
+        if [ "${{ inputs.use-vcpkg }}" = "true" ]; then \
+          cmake -S . -B ./build -A ${{ matrix.cmake-arch }} ${{ inputs.cmake-flags }} -DCMAKE_TOOLCHAIN_FILE="./vcpkg/scripts/buildsystems/vcpkg.cmake" -DVCPKG_TARGET_TRIPLET=${{ matrix.vcpkg-triplet }}; \
+        else \
+          cmake -S . -B ./build -A ${{ matrix.cmake-arch }} ${{ inputs.cmake-flags }}; \
+        fi
     - name: Build
       run: |
         cd ${{ inputs.repo-path }}
@@ -263,13 +263,7 @@ jobs:
   build-android:
     runs-on: ubuntu-latest
     env:
-      android-cmake-flags: |
-        -G "Ninja"
-        -DCMAKE_SYSTEM_NAME=Android
-        -DCMAKE_ANDROID_NDK=$ANDROID_NDK_HOME
-        -DCMAKE_ANDROID_NDK_TOOLCHAIN_VERSION=clang
-        -DCMAKE_ANDROID_STL_TYPE=c++_shared
-        -DANDROID_NDK=$ANDROID_NDK_HOME
+      android-cmake-flags: -G "Ninja" -DCMAKE_SYSTEM_NAME=Android -DCMAKE_ANDROID_NDK=$ANDROID_NDK_HOME -DCMAKE_ANDROID_NDK_TOOLCHAIN_VERSION=clang -DCMAKE_ANDROID_STL_TYPE=c++_shared -DANDROID_NDK=$ANDROID_NDK_HOME
     steps:
       - uses: actions/checkout@v4
         with:
