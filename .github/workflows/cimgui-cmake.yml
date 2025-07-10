@@ -21,3 +21,4 @@ jobs:
       bin-name-osx-normalized: cimgui.dylib
       bin-name-android: cimgui.so
       bin-name-android-normalized: cimgui.so
+      android-api: 23

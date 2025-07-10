@@ -116,6 +116,26 @@ on:
         required: false
         default: ''
         type: string
+      cmake-flags-linux:
+        description: 'Additional CMake flags for Linux.'
+        required: false
+        default: ''
+        type: string
+      cmake-flags-macos:
+        description: 'Additional CMake flags for macOS.'
+        required: false
+        default: ''
+        type: string
+      cmake-flags-windows:
+        description: 'Additional CMake flags for Windows.'
+        required: false
+        default: ''
+        type: string
+      cmake-flags-android:
+        description: 'Additional CMake flags for Android.'
+        required: false
+        default: ''
+        type: string
 
 jobs:
   build:
@@ -203,18 +223,18 @@ jobs:
       run: |
         cd ${{ inputs.repo-path }}
         if [ "${{ inputs.use-vcpkg }}" = "true" ]; then \
-          cmake -S . -B ./build ${{ inputs.cmake-flags }} -DCMAKE_TOOLCHAIN_FILE="./vcpkg/scripts/buildsystems/vcpkg.cmake" -DVCPKG_TARGET_TRIPLET=${{ matrix.vcpkg-triplet }}; \
+          cmake -S . -B ./build ${{ inputs.cmake-flags }} ${{ inputs.cmake-flags-linux }} -DCMAKE_TOOLCHAIN_FILE="./vcpkg/scripts/buildsystems/vcpkg.cmake" -DVCPKG_TARGET_TRIPLET=${{ matrix.vcpkg-triplet }}; \
         else \
-          cmake -S . -B ./build ${{ inputs.cmake-flags }}; \
+          cmake -S . -B ./build ${{ inputs.cmake-flags }} ${{ inputs.cmake-flags-linux }}; \
         fi
     - name: Configure with CMake for macOS
       if: matrix.os-name == 'macos'
       run: |
         cd ${{ inputs.repo-path }}
         if [ "${{ inputs.use-vcpkg }}" = "true" ]; then \
-          cmake -S . -B ./build -DCMAKE_OSX_ARCHITECTURES=${{ matrix.cmake-arch }} ${{ inputs.cmake-flags }} -DCMAKE_TOOLCHAIN_FILE="./vcpkg/scripts/buildsystems/vcpkg.cmake" -DVCPKG_TARGET_TRIPLET=${{ matrix.vcpkg-triplet }}; \
+          cmake -S . -B ./build -DCMAKE_OSX_ARCHITECTURES=${{ matrix.cmake-arch }} ${{ inputs.cmake-flags }} ${{ inputs.cmake-flags-macos }} -DCMAKE_TOOLCHAIN_FILE="./vcpkg/scripts/buildsystems/vcpkg.cmake" -DVCPKG_TARGET_TRIPLET=${{ matrix.vcpkg-triplet }}; \
         else \
-          cmake -S . -B ./build -DCMAKE_OSX_ARCHITECTURES=${{ matrix.cmake-arch }} ${{ inputs.cmake-flags }}; \
+          cmake -S . -B ./build -DCMAKE_OSX_ARCHITECTURES=${{ matrix.cmake-arch }} ${{ inputs.cmake-flags }} ${{ inputs.cmake-flags-macos }}; \
         fi
     - name: Configure with CMake for Windows
       if: matrix.os-name == 'windows'
@@ -222,9 +242,9 @@ jobs:
       run: |
         cd ${{ inputs.repo-path }}
         if [ "${{ inputs.use-vcpkg }}" = "true" ]; then \
-          cmake -S . -B ./build -A ${{ matrix.cmake-arch }} ${{ inputs.cmake-flags }} -DCMAKE_TOOLCHAIN_FILE="./vcpkg/scripts/buildsystems/vcpkg.cmake" -DVCPKG_TARGET_TRIPLET=${{ matrix.vcpkg-triplet }}; \
+          cmake -S . -B ./build -A ${{ matrix.cmake-arch }} ${{ inputs.cmake-flags }} ${{ inputs.cmake-flags-windows }} -DCMAKE_TOOLCHAIN_FILE="./vcpkg/scripts/buildsystems/vcpkg.cmake" -DVCPKG_TARGET_TRIPLET=${{ matrix.vcpkg-triplet }}; \
         else \
-          cmake -S . -B ./build -A ${{ matrix.cmake-arch }} ${{ inputs.cmake-flags }}; \
+          cmake -S . -B ./build -A ${{ matrix.cmake-arch }} ${{ inputs.cmake-flags }} ${{ inputs.cmake-flags-windows }}; \
         fi
     - name: Build
       run: |
@@ -303,18 +323,18 @@ jobs:
         run: |
             cd ${{ inputs.repo-path }}
             if [ "${{ inputs.use-vcpkg }}" = "true" ]; then \
-              cmake -S . -B ./build/arm64-v8a ${{ env.android-cmake-flags }} -DCMAKE_ANDROID_ARCH_ABI=arm64-v8a -DCMAKE_ANDROID_API=${{ inputs.android-api }} ${{ inputs.cmake-flags }} -DCMAKE_TOOLCHAIN_FILE="./vcpkg/scripts/buildsystems/vcpkg.cmake" -DVCPKG_TARGET_TRIPLET=arm64-android; \
+              cmake -S . -B ./build/arm64-v8a ${{ env.android-cmake-flags }} -DCMAKE_ANDROID_ARCH_ABI=arm64-v8a -DCMAKE_ANDROID_API=${{ inputs.android-api }} ${{ inputs.cmake-flags }} ${{ inputs.cmake-flags-android }} -DCMAKE_TOOLCHAIN_FILE="./vcpkg/scripts/buildsystems/vcpkg.cmake" -DVCPKG_TARGET_TRIPLET=arm64-android; \
             else \
-              cmake -S . -B ./build/arm64-v8a ${{ env.android-cmake-flags }} -DCMAKE_ANDROID_ARCH_ABI=arm64-v8a -DCMAKE_ANDROID_API=${{ inputs.android-api }} ${{ inputs.cmake-flags }}; \
+              cmake -S . -B ./build/arm64-v8a ${{ env.android-cmake-flags }} -DCMAKE_ANDROID_ARCH_ABI=arm64-v8a -DCMAKE_ANDROID_API=${{ inputs.android-api }} ${{ inputs.cmake-flags }} ${{ inputs.cmake-flags-android }}; \
             fi
             cmake --build ./build/arm64-v8a --config Release
       - name: Build for x86_64
         run: |
             cd ${{ inputs.repo-path }}
             if [ "${{ inputs.use-vcpkg }}" = "true" ]; then \
-              cmake -S . -B ./build/x86_64 ${{ env.android-cmake-flags }} -DCMAKE_ANDROID_ARCH_ABI=x86_64 -DCMAKE_ANDROID_API=${{ inputs.android-api }} ${{ inputs.cmake-flags }} -DCMAKE_TOOLCHAIN_FILE="./vcpkg/scripts/buildsystems/vcpkg.cmake" -DVCPKG_TARGET_TRIPLET=x64-android; \
+              cmake -S . -B ./build/x86_64 ${{ env.android-cmake-flags }} -DCMAKE_ANDROID_ARCH_ABI=x86_64 -DCMAKE_ANDROID_API=${{ inputs.android-api }} ${{ inputs.cmake-flags }} ${{ inputs.cmake-flags-android }} -DCMAKE_TOOLCHAIN_FILE="./vcpkg/scripts/buildsystems/vcpkg.cmake" -DVCPKG_TARGET_TRIPLET=x64-android; \
             else \
-              cmake -S . -B ./build/x86_64 ${{ env.android-cmake-flags }} -DCMAKE_ANDROID_ARCH_ABI=x86_64 -DCMAKE_ANDROID_API=${{ inputs.android-api }} ${{ inputs.cmake-flags }}; \
+              cmake -S . -B ./build/x86_64 ${{ env.android-cmake-flags }} -DCMAKE_ANDROID_ARCH_ABI=x86_64 -DCMAKE_ANDROID_API=${{ inputs.android-api }} ${{ inputs.cmake-flags }} ${{ inputs.cmake-flags-android }}; \
             fi
             cmake --build ./build/x86_64 --config Release
       - name: Normalize binaries for Android
