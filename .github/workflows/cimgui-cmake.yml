@@ -83,17 +83,10 @@ jobs:
   create-pr:
     uses: ./.github/workflows/create-pr.yml
     needs: [build-cimgui, build-cimplot, build-cimnodes, build-cimguizmo]
-    env:
+    with:
       lib-name: Dear ImGui + Addons
       repo-tag: latest
       output-dir: native
       branch: native-artifacts-branch
       base: master
       reviewers: JunaMeinhold
-    with:
-      lib-name: ${{ env.lib-name }}
-      repo-tag: ${{ env.repo-tag }}
-      output-dir: ${{ env.output-dir }}
-      branch: ${{ env.branch }}
-      base: ${{ env.base }}
-      reviewers: ${{ env.reviewers }}
