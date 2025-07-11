@@ -101,12 +101,17 @@ jobs:
       - name: Trim Library Name
         run: |
           cd ${{ env.output-dir }}
-          
+          shopt -s nullglob dotglob
           for artifact_dir in */; do
             if [ -d "$artifact_dir" ]; then
               artifact_name="${artifact_dir%/}"
-              platform="${artifact_name#*-}"
-              mv "$artifact_dir*" "$platform/"
+              rtid="${artifact_name#*-}"
+              mkdir -p "$rtid"
+              files=("$artifact_dir"/*)
+              if [ ${#files[@]} -gt 0 ]; then
+                mv "$artifact_dir"/* "$rtid/"
+              fi
+              rmdir "$artifact_dir"
             fi
           done
       - name: Create a Pull Request
