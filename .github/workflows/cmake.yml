@@ -151,6 +151,11 @@ on:
         required: false
         default: ""
         type: string
+      create-pr:
+        description: "Whether to create a pull request"
+        required: false
+        default: true
+        type: boolean
 
 jobs:
   build:
@@ -397,6 +402,7 @@ jobs:
   create-pr:
     runs-on: ubuntu-latest
     needs: [build, build-android]
+    if: inputs.create-pr == true
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
