@@ -400,43 +400,13 @@ jobs:
           path: ${{ inputs.build-output-dir }}/x86_64/*.so
           if-no-files-found: error
   create-pr:
-    runs-on: ubuntu-latest
+    uses: ./.github/workflows/create-pr.yml
     needs: [build, build-android]
     if: inputs.create-pr == true
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-      - name: Download all artifacts
-        uses: actions/download-artifact@v4
-        with:
-          path: ${{ inputs.output-dir }}
-      - name: Trim Library Name
-        run: |
-          cd ${{ inputs.output-dir }}
-          shopt -s nullglob dotglob
-          for artifact_dir in */; do
-            if [ -d "$artifact_dir" ]; then
-              artifact_name="${artifact_dir%/}"
-              rtid="${artifact_name#*-}"
-              # Move only if rtid is not the same as artifact_name (avoid moving rtid into itself)
-              if [ "$artifact_name" != "$rtid" ]; then
-                mv -n "$artifact_dir"/* "$rtid/" 2>/dev/null || true
-                # Remove the directory only if it is empty
-                if [ -z "$(ls -A "$artifact_dir")" ]; then
-                  rmdir "$artifact_dir"
-                fi
-              fi
-            fi
-          done
-      - name: Create a Pull Request
-        uses: peter-evans/create-pull-request@v7
-        with:
-          title: "Update native libraries for ${{ inputs.lib-name }} to version ${{ inputs.repo-tag }}"
-          body: "This pull request updates the native libraries in the ${{ inputs.output-dir }} folder to version ${{ inputs.repo-tag }}."
-          commit-message: "chore: update native libraries to version ${{ inputs.repo-tag }}"
-          add-paths: "${{ inputs.output-dir }}/*"
-          branch: ${{ inputs.branch }}
-          base: ${{ inputs.base }}
-          reviewers: ${{ inputs.reviewers }}
-          sign-commits: true
-          delete-branch: true
+    with:
+      lib-name: ${{ inputs.lib-name }}
+      repo-tag: ${{ inputs.repo-tag }}
+      output-dir: ${{ inputs.output-dir }}
+      branch: ${{ inputs.branch }}
+      base: ${{ inputs.base }}
+      reviewers: ${{ inputs.reviewers }}

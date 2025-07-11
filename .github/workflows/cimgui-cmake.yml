@@ -2,14 +2,6 @@ name: Build cimgui Libraries via cmake.yml
 
 on: [workflow_dispatch]
 
-env:
-  lib-name: Dear ImGui + Addons
-  repo-tag: latest
-  output-dir: native
-  branch: native-artifacts-branch
-  base: master
-  reviewers: JunaMeinhold
-
 jobs:
   build-cimgui:
     uses: ./.github/workflows/cmake.yml
@@ -49,7 +41,7 @@ jobs:
       bin-name-android-normalized: cimplot.so
       android-api: 23
       pre-configure-steps: git clone --recursive https://github.com/JunaMeinhold/cimgui.git
-      create-pr: false 
+      create-pr: false
   build-cimnodes:
     uses: ./.github/workflows/cmake.yml
     with:
@@ -89,42 +81,19 @@ jobs:
       pre-configure-steps: git clone --recursive https://github.com/JunaMeinhold/cimgui.git
       create-pr: false
   create-pr:
-    runs-on: ubuntu-latest
+    uses: ./.github/workflows/create-pr.yml
     needs: [build-cimgui, build-cimplot, build-cimnodes, build-cimguizmo]
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-      - name: Download all artifacts
-        uses: actions/download-artifact@v4
-        with:
-          path: ${{ env.output-dir }}
-      - name: Trim Library Name
-        run: |
-          cd ${{ env.output-dir }}
-          shopt -s nullglob dotglob
-          for artifact_dir in */; do
-            if [ -d "$artifact_dir" ]; then
-              artifact_name="${artifact_dir%/}"
-              rtid="${artifact_name#*-}"
-              # Move only if rtid is not the same as artifact_name (avoid moving rtid into itself)
-              if [ "$artifact_name" != "$rtid" ]; then
-                mv -n "$artifact_dir"/* "$rtid/" 2>/dev/null || true
-                # Remove the directory only if it is empty
-                if [ -z "$(ls -A "$artifact_dir")" ]; then
-                  rmdir "$artifact_dir"
-                fi
-              fi
-            fi
-          done
-      - name: Create a Pull Request
-        uses: peter-evans/create-pull-request@v7
-        with:
-          title: "Update native libraries for ${{ env.lib-name }} to version ${{ env.repo-tag }}"
-          body: "This pull request updates the native libraries in the ${{ env.output-dir }} folder to version ${{ env.repo-tag }}."
-          commit-message: "chore: update native libraries to version ${{ env.repo-tag }}"
-          add-paths: "${{ env.output-dir }}/*"
-          branch: ${{ env.branch }}
-          base: ${{ env.base }}
-          reviewers: ${{ env.reviewers }}
-          sign-commits: true
-          delete-branch: true
+    env:
+      lib-name: Dear ImGui + Addons
+      repo-tag: latest
+      output-dir: native
+      branch: native-artifacts-branch
+      base: master
+      reviewers: JunaMeinhold
+    with:
+      lib-name: ${{ env.lib-name }}
+      repo-tag: ${{ env.repo-tag }}
+      output-dir: ${{ env.output-dir }}
+      branch: ${{ env.branch }}
+      base: ${{ env.base }}
+      reviewers: ${{ env.reviewers }}
