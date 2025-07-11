@@ -4,7 +4,7 @@ on: [workflow_dispatch]
 
 jobs:
   build-cimgui:
-    uses: ./.github/workflows/cmake.yml
+    uses: JunaMeinhold/cmake-actions/cmake.yml@v1
     with:
       lib-name: cimgui
       repo: JunaMeinhold/cimgui
@@ -24,7 +24,7 @@ jobs:
       android-api: 23
       create-pr: false
   build-cimplot:
-    uses: ./.github/workflows/cmake.yml
+    uses: JunaMeinhold/cmake-actions/cmake.yml@v1
     with:
       lib-name: cimplot
       repo: JunaMeinhold/cimplot
@@ -43,7 +43,7 @@ jobs:
       pre-configure-steps: git clone --recursive https://github.com/JunaMeinhold/cimgui.git
       create-pr: false
   build-cimnodes:
-    uses: ./.github/workflows/cmake.yml
+    uses: JunaMeinhold/cmake-actions/cmake.yml@v1
     with:
       lib-name: cimnodes
       repo: JunaMeinhold/cimnodes
@@ -62,7 +62,7 @@ jobs:
       pre-configure-steps: git clone --recursive https://github.com/JunaMeinhold/cimgui.git
       create-pr: false
   build-cimguizmo:
-    uses: ./.github/workflows/cmake.yml
+    uses: JunaMeinhold/cmake-actions/cmake.yml@v1
     with:
       lib-name: cimguizmo
       repo: JunaMeinhold/cimguizmo
@@ -81,7 +81,7 @@ jobs:
       pre-configure-steps: git clone --recursive https://github.com/JunaMeinhold/cimgui.git
       create-pr: false
   create-pr:
-    uses: ./.github/workflows/create-pr.yml
+    uses: JunaMeinhold/cmake-actions/create-pr.yml@v1
     needs: [build-cimgui, build-cimplot, build-cimnodes, build-cimguizmo]
     with:
       lib-name: Dear ImGui + Addons
