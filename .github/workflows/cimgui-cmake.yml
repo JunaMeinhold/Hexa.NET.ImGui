@@ -106,7 +106,7 @@ jobs:
             if [ -d "$artifact_dir" ]; then
               artifact_name="${artifact_dir%/}"
               platform="${artifact_name#*-}"
-              mv "$artifact_dir/*" "$platform/"
+              mv "$artifact_dir*" "$platform/"
             fi
           done
       - name: Create a Pull Request
