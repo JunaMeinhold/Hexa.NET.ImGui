@@ -22,7 +22,7 @@ jobs:
       bin-name-android: cimgui.so
       bin-name-android-normalized: cimgui.so
       android-api: 23
-  build-implot:
+  build-cimplot:
     uses: ./.github/workflows/cmake.yml
     with:
       lib-name: cimplot
@@ -39,7 +39,8 @@ jobs:
       bin-name-android: cimplot.so
       bin-name-android-normalized: cimplot.so
       android-api: 23
-  build-imnodes:
+      pre-configure-steps: git clone --recursive https://github.com/JunaMeinhold/cimgui.git 
+  build-cimnodes:
     uses: ./.github/workflows/cmake.yml
     with:
       lib-name: cimnodes
@@ -56,7 +57,8 @@ jobs:
       bin-name-android: cimnodes.so
       bin-name-android-normalized: cimnodes.so
       android-api: 23
-  build-imguizmo:
+      pre-configure-steps: git clone --recursive https://github.com/JunaMeinhold/cimgui.git
+  build-cimguizmo:
     uses: ./.github/workflows/cmake.yml
     with:
       lib-name: cimguizmo
@@ -73,3 +75,4 @@ jobs:
       bin-name-android: cimguizmo.so
       bin-name-android-normalized: cimguizmo.so
       android-api: 23
+      pre-configure-steps: git clone --recursive https://github.com/JunaMeinhold/cimgui.git
